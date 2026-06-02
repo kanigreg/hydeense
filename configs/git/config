@@ -1,0 +1,55 @@
+# [include]
+#   path = ~/.config/delta/theme.gitconfig
+
+[user]
+  email = kanigreg@gmail.com
+  name = kanigreg
+
+[alias]
+  hist = "log --pretty=format:\"%C(bold blue)%h%C(reset) %C(dim green)%ad%C(reset) | %C(white)%s%C(reset)%C(reset)%C(bold yellow)%d%C(reset) %C(dim italic white)- %an%C(reset)\" --graph --date=short"
+  lg = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
+  lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all	
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  type = cat-file -t
+  dump = cat-file -p
+
+[core]
+  autocrlf = input
+  safecrlf = warn
+  excludesFile = ~/.config/git/ignore
+  editor = nvim
+  # pager = delta
+
+[init]
+  defaultBranch = main
+
+[merge]
+  tool = diffview
+  conflictstyle = zdiff3
+
+[mergetool]
+  prompt = false
+  keepBackup = false
+
+[mergetool "diffview"]
+  cmd = nvim -n -c "DiffViewOpen" "$MERGE"
+
+[diff]
+  colorMoved = default
+
+[rebase]
+	updateRefs = true
+
+# [interactive]
+#   diffFilter = delta --color-only
+
+# [delta]
+#   navigate = true  # use n and N to move between diff sections
+#   dark = true      # or light = true, or omit for auto-detection
+#   features = catppuccin-mocha
+
+[credential]
+	helper = libsecret

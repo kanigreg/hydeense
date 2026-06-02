@@ -1,0 +1,67 @@
+# JetBrains IDE settings
+.idea/
+
+# VSCode specific folder
+.vscode/
+
+# pyenv local config file
+.python-version
+
+# Environment variables
+.env*
+!.env.example
+
+# asdf version file
+.tool-versions
+
+# Local specific docker compose config
+personal-compose.yml
+
+# Bundle local configurations
+.bundle/
+
+# Job RSpec artefacts
+spec/vcr_debug.txt
+spec/examples.txt
+
+# rails.vim plugin config
+config/projections.json
+
+# neoconf config file
+*/.neoconf.json
+
+# Ruby LSP specific files
+.ruby-lsp
+.yardoc
+.index.yml
+.solargraph.yml
+
+# Zsh specific files
+.zshrc
+.p10k.zsh
+.zsh/
+.cache/
+
+# Spell checker config
+typos.toml
+spell/
+.cspell.json
+
+# Custom project files
+Dockerfile.patched
+docker-compose.patched.yml
+Makefile.patched
+
+# Project specific notes
+.neonotes/
+
+# Kulala rest client
+http-client.private.env.json
+kulala/
+
+# Personaly used project specific files
+.local/
+
+# Tmuxinator
+.tmuxinator.yml
+.tmuxinator.yaml
