@@ -14,71 +14,88 @@ NC='\033[0m' # No Color
 DRY_RUN="${DRY_RUN:-false}"
 
 log_info() {
-    echo -e "${GREEN}[INFO]${NC} $*"
+  echo -e "${GREEN}[INFO]${NC} $*"
 }
 
 log_warn() {
-    echo -e "${YELLOW}[WARN]${NC} $*"
+  echo -e "${YELLOW}[WARN]${NC} $*"
 }
 
 log_error() {
-    echo -e "${RED}[ERROR]${NC} $*" >&2
+  echo -e "${RED}[ERROR]${NC} $*" >&2
 }
 
 log_step() {
-    echo -e "${BLUE}[>>>]${NC} $*"
+  echo -e "${BLUE}[>>>]${NC} $*"
 }
 
 # Проверка что скрипт запущен от root
 require_root() {
-    if [[ $EUID -ne 0 ]]; then
-        log_error "Этот скрипт должен быть запущен от root (используй sudo)"
-        exit 1
-    fi
+  if [[ $EUID -ne 0 ]]; then
+    log_error "Этот скрипт должен быть запущен от root (используй sudo)"
+    exit 1
+  fi
 }
 
 # Проверка что команда доступна
 is_installed() {
-    command -v "$1" &>/dev/null
+  command -v "$1" &>/dev/null
 }
 
 # Бэкап файла/директории перед заменой
 backup_file() {
-    local target="$1"
-    local backup_dir="${HYDEENSE_BACKUP_DIR:-$HOME/.local/share/hydeense/backups}"
-    local timestamp
-    timestamp=$(date +%Y%m%d_%H%M%S)
+  local target="$1"
+  local backup_dir="${HYDEENSE_BACKUP_DIR:-$HOME/.local/share/hydeense/backups}"
+  local timestamp
+  timestamp=$(date +%Y%m%d_%H%M%S)
 
-    if [[ -e "$target" && ! -L "$target" ]]; then
-        mkdir -p "$backup_dir"
-        local backup_path="$backup_dir/$(basename "$target").$timestamp"
-        if [[ "$DRY_RUN" == "true" ]]; then
-            log_info "[DRY-RUN] Бэкап: $target -> $backup_path"
-        else
-            cp -r "$target" "$backup_path"
-            log_info "Бэкап: $target -> $backup_path"
-        fi
+  if [[ -e "$target" && ! -L "$target" ]]; then
+    mkdir -p "$backup_dir"
+    local backup_path="$backup_dir/$(basename "$target").$timestamp"
+    if [[ "$DRY_RUN" == "true" ]]; then
+      log_info "[DRY-RUN] Бэкап: $target -> $backup_path"
+    else
+      cp -r "$target" "$backup_path"
+      log_info "Бэкап: $target -> $backup_path"
     fi
+  fi
 }
 
 # Определение пользователя (при запуске через sudo)
 get_real_user() {
-    echo "${SUDO_USER:-$USER}"
+  echo "${SUDO_USER:-$USER}"
 }
 
 get_real_home() {
-    local user
-    user=$(get_real_user)
-    eval echo "~$user"
+  local user
+  user=$(get_real_user)
+  eval echo "~$user"
 }
 
 # Выполнение команды от имени реального пользователя (не root)
 run_as_user() {
-    local user
-    user=$(get_real_user)
-    if [[ $EUID -eq 0 ]]; then
-        sudo -u "$user" "$@"
-    else
-        "$@"
-    fi
+  local user
+  user=$(get_real_user)
+  if [[ $EUID -eq 0 ]]; then
+    sudo -u "$user" "$@"
+  else
+    "$@"
+  fi
+}
+
+# Добавляет строку вида:
+# export KEY="VALUE"
+# в указанный файл, если переменная ещё не определена.
+add_env() {
+  local file="$1"
+  local key="$2"
+  local value="$3"
+
+  touch "$file"
+
+  if ! grep -qE "^(export[[:space:]]+)?${key}=" "$file"; then
+    # Экранируем двойные кавычки в значении
+    local escaped_value="${value//\"/\\\"}"
+    printf '\nexport %s="%s"\n' "$key" "$escaped_value" >>"$file"
+  fi
 }
