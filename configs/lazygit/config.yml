@@ -1,0 +1,47 @@
+git:
+  pagers:
+    - pager: delta --dark --paging=never
+customCommands:
+  - key: "<c-o>"
+    context: "commits"
+    command: "xdg-open https://tracke6.yandex.ru/{{ slice .SelectedCommit.Name 0 17 }}"
+
+services:
+  "gitlab.it-forrest.ru": "gitlab:gitlab.it-forrest.ru"
+
+gui:
+  nerdFontsVersion: "3"
+
+  theme:
+    activeBorderColor:
+      - "#89b4fa"
+      - bold
+    inactiveBorderColor:
+      - "#a6adc8"
+    optionsTextColor:
+      - "#89b4fa"
+    selectedLineBgColor:
+      - "#313244"
+    cherryPickedCommitBgColor:
+      - "#45475a"
+    cherryPickedCommitFgColor:
+      - "#89b4fa"
+    unstagedChangesColor:
+      - "#f38ba8"
+    defaultFgColor:
+      - "#cdd6f4"
+    searchingActiveBorderColor:
+      - "#f9e2af"
+
+  authorColors:
+    "kanigreg": "#b4befe"
+    "Григорий Каниев": "#b4befe"
+    "Grigory Kaniev": "#b4befe"
+    "*": "#a6adc8"
+
+  branchColorPatterns:
+    "*": "#a6adc8"
+    "^main$": yellow
+    '^[\d]{1,6}\/': green
+    '^s[\d]{1,6}\/': "#89b4fa"
+    '^h[\d]{1,6}\/': "#f38ba8"
