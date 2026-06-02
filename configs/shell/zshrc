@@ -47,7 +47,6 @@ alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
 
 if command -v zoxide &> /dev/null; then
   eval "$(zoxide init zsh)"
-  alias cd="zd"
   zd() {
     if [ $# -eq 0 ]; then
       builtin cd ~ && return
@@ -57,6 +56,7 @@ if command -v zoxide &> /dev/null; then
       z "$@" && printf "\U000F17A9 " && pwd || echo "Error: Directory not found"
     fi
   }
+  alias cd="zd"
 fi
 
 open() {
@@ -86,7 +86,7 @@ if command -v fzf &> /dev/null; then
   --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
   --color=selected-bg:#45475A \
   --color=border:#6C7086,label:#CDD6F4"
-end
+fi
 
 # --- kubectl ---
 if command -v kubectl &> /dev/null; then
