@@ -2,14 +2,18 @@
 # Модуль: shell
 # Установка zsh, starship, конфигурация shell-окружения
 
-log_step "Настройка shell (zsh + starship)"
+log_step "Настройка shell"
 
 SHELL_PACKAGES=(
-    zsh
-    zsh-completions
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-    starship
+  zsh
+  zsh-completions
+  zsh-autosuggestions
+  zsh-syntax-highlighting
+  starship
+  eza
+  bat
+  zoxide
+  fzf
 )
 
 install_packages "${SHELL_PACKAGES[@]}"
@@ -40,5 +44,7 @@ link_config "$HYDEENSE_DIR/configs/shell/zshrc" "$local_home/.zshrc"
 
 # starship.toml
 link_config "$HYDEENSE_DIR/configs/shell/starship.toml" "$local_home/.config/starship.toml"
+
+link_config_dir "$HYDEENSE_DIR/configs/bat" "$local_home/.config/bat"
 
 log_info "Модуль shell завершён"

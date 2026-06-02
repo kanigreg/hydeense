@@ -32,6 +32,36 @@ alias ls='ls --color=auto'
 alias ll='ls -lah'
 alias la='ls -A'
 alias grep='grep --color=auto'
+alias nvim="nvim -n"
+alias lg='lazygit'
+alias ld='lazydocker'
+
+if command -v eza &> /dev/null; then
+  alias ls='eza -lh --group-directories-first --icons=auto'
+  alias lsa='ls -a'
+  alias lt='eza --tree --level=2 --long --icons --git'
+  alias lta='lt -a'
+fi
+
+alias ff="fzf --preview 'bat --style=numbers --color=always {}'"
+
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init zsh)"
+  alias cd="zd"
+  zd() {
+    if [ $# -eq 0 ]; then
+      builtin cd ~ && return
+    elif [ -d "$1" ]; then
+      builtin cd "$1"
+    else
+      z "$@" && printf "\U000F17A9 " && pwd || echo "Error: Directory not found"
+    fi
+  }
+fi
+
+open() {
+  xdg-open "$@" >/dev/null 2>&1 &
+}
 
 # --- mise ---
 if command -v mise &>/dev/null; then
@@ -43,3 +73,24 @@ if command -v starship &>/dev/null; then
     eval "$(starship init zsh)"
 fi
 
+# --- fzf ---
+if command -v fzf &> /dev/null; then
+  source /usr/share/fzf/key-bindings.zsh
+  source /usr/share/fzf/completion.zsh
+
+  export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
+  export FZF_CTRL_T_OPTS="--preview 'bat --style=numbers --color=always {}'"
+  export FZF_DEFAULT_OPTS=" \
+  --color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
+  --color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
+  --color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
+  --color=selected-bg:#45475A \
+  --color=border:#6C7086,label:#CDD6F4"
+end
+
+# --- kubectl ---
+if command -v kubectl &> /dev/null; then
+  source <(kubectl completion zsh)
+  alias k='kubectl'
+  complete -o default -F __start_kubectl k
+fi
