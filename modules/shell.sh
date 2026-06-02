@@ -36,7 +36,7 @@ fi
 local_home=$(get_real_home)
 
 # .zshrc
-link_config "$HYDEENSE_DIR/configs/shell/.zshrc" "$local_home/.zshrc"
+link_config "$HYDEENSE_DIR/configs/shell/zshrc" "$local_home/.zshrc"
 
 # starship.toml
 link_config "$HYDEENSE_DIR/configs/shell/starship.toml" "$local_home/.config/starship.toml"

@@ -1,0 +1,45 @@
+# Hydeense — конфигурация zsh
+
+# --- История ---
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+
+# --- Базовые опции ---
+setopt AUTO_CD
+setopt INTERACTIVE_COMMENTS
+setopt NO_BEEP
+
+# --- Плагины (из пакетов Arch) ---
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+
+# --- Completions ---
+autoload -Uz compinit
+compinit
+
+# --- Keybindings ---
+bindkey -e  # emacs-режим
+bindkey '^[[A' history-search-backward
+bindkey '^[[B' history-search-forward
+
+# --- Алиасы ---
+alias ls='ls --color=auto'
+alias ll='ls -lah'
+alias la='ls -A'
+alias grep='grep --color=auto'
+
+# --- mise ---
+if command -v mise &>/dev/null; then
+    eval "$(mise activate zsh)"
+fi
+
+# --- Starship prompt ---
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi
+
