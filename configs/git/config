@@ -1,5 +1,5 @@
-# [include]
-#   path = ~/.config/delta/theme.gitconfig
+[include]
+  path = ~/.config/delta/theme.gitconfig
 
 [user]
   email = kanigreg@gmail.com
@@ -21,7 +21,7 @@
   safecrlf = warn
   excludesFile = ~/.config/git/ignore
   editor = nvim
-  # pager = delta
+  pager = delta
 
 [init]
   defaultBranch = main
@@ -43,13 +43,13 @@
 [rebase]
 	updateRefs = true
 
-# [interactive]
-#   diffFilter = delta --color-only
+[interactive]
+  diffFilter = delta --color-only
 
-# [delta]
-#   navigate = true  # use n and N to move between diff sections
-#   dark = true      # or light = true, or omit for auto-detection
-#   features = catppuccin-mocha
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  dark = true      # or light = true, or omit for auto-detection
+  features = catppuccin-mocha
 
 [credential]
 	helper = libsecret
