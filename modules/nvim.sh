@@ -4,7 +4,22 @@
 
 log_step "Установка Neovim"
 
-install_packages neovim
+PACKAGES=(
+    nvim
+    git
+    curl
+    ripgrep
+    fd
+    jq
+    fzf
+    mise
+    tree-sitter-cli
+)
+
+install_packages "${PACKAGES[@]}"
+
+mise use --global lua@5.1
+mise use --global node@latest
 
 # --- Линковка конфига ---
 
