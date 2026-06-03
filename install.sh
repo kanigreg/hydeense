@@ -41,6 +41,7 @@ usage() {
   echo "  --all              Установить все модули"
   echo "  --module <name>    Установить конкретный модуль (можно указать несколько раз)"
   echo "  --list             Показать доступные модули"
+  echo "  --update-mirrors   Обновить pacman зеркала"
   echo "  --help             Показать эту справку"
 }
 
@@ -61,6 +62,12 @@ while [[ $# -gt 0 ]]; do
   --list)
     SHOW_LIST=true
     shift
+    ;;
+  --update-mirrors)
+    install_packages reflector
+    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
+    sudo reflector --latest 5
+    exit 0
     ;;
   --help | -h)
     usage
