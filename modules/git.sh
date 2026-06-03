@@ -6,6 +6,7 @@ PACKAGES=(
   git
   git-delta
   lazygit
+  libsecret
 )
 
 install_packages "${PACKAGES[@]}"
