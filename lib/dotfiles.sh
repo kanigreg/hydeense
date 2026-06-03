@@ -71,3 +71,17 @@ link_config_dir() {
   # Линкуем саму директорию целиком
   link_config "$source_dir" "$target_dir"
 }
+
+# Клонирование или обновление репозитори
+clone_repo() {
+  local dest="$1"
+  local url="$2"
+  local branch="${3:-main}"
+
+  if [ -d "$dest/.git" ]; then
+    git -C "$dest" fetch origin
+    git -C "$dest" reset --hard origin/main
+  else
+    git clone -b "$branch" "$url" "$dest"
+  fi
+}

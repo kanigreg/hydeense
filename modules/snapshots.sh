@@ -2,36 +2,34 @@
 # Модуль: snapshots
 # Настройка snapper для btrfs snapshot'ов (subvolumes @ и @home)
 
-log_step "Настройка snapper (btrfs snapshots)"
-
 install_packages snapper
 
 # --- Конфигурация snapper для root (@) ---
 
-if snapper -c root get-config &>/dev/null 2>&1; then
+if sudo snapper -c root get-config &>/dev/null 2>&1; then
   log_info "Конфигурация snapper 'root' уже существует"
 else
   log_step "Создание конфигурации snapper для / (subvolume @)"
 
   if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] snapper -c root create-config /"
+    log_info "[DRY-RUN] sudo snapper -c root create-config /"
   else
-    snapper -c root create-config /
+    sudo snapper -c root create-config /
     log_info "Конфигурация snapper 'root' создана"
   fi
 fi
 
 # --- Конфигурация snapper для home (@home) ---
 
-if snapper -c home get-config &>/dev/null 2>&1; then
+if sudo snapper -c home get-config &>/dev/null 2>&1; then
   log_info "Конфигурация snapper 'home' уже существует"
 else
   log_step "Создание конфигурации snapper для /home (subvolume @home)"
 
   if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] snapper -c home create-config /home"
+    log_info "[DRY-RUN] sudo snapper -c home create-config /home"
     # else
-    # snapper -c home create-config /home
+    # sudo snapper -c home create-config /home
     # log_info "Конфигурация snapper 'home' создана"
   fi
 fi
@@ -50,11 +48,11 @@ hydeense_snapshot() {
   log_step "Создание snapshot: $description"
 
   if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] snapper -c root create -d '$description'"
-    log_info "[DRY-RUN] snapper -c home create -d '$description'"
+    log_info "[DRY-RUN] sudo snapper -c root create -d '$description'"
+    log_info "[DRY-RUN] sudo snapper -c home create -d '$description'"
   else
-    snapper -c root create --description "$description" || log_warn "Не удалось создать snapshot для root"
-    # snapper -c home create --description "$description" || log_warn "Не удалось создать snapshot для home"
+    sudo snapper -c root create --description "$description" || log_warn "Не удалось создать snapshot для root"
+    # sudo snapper -c home create --description "$description" || log_warn "Не удалось создать snapshot для home"
     log_info "Snapshot'ы созданы: $description"
   fi
 }

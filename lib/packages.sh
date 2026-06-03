@@ -21,7 +21,7 @@ install_packages() {
     return 0
   fi
 
-  pacman -S --needed --noconfirm "${packages[@]}"
+  sudo pacman -S --needed --noconfirm "${packages[@]}"
 }
 
 # Установка пакетов из AUR через yay
@@ -45,8 +45,8 @@ install_aur() {
     return 0
   fi
 
-  # AUR-пакеты ставим от обычного пользователя
-  run_as_user yay -S --needed --noconfirm "${packages[@]}"
+  # AUR-пакеты ставим от обычного пользователя (yay нельзя запускать от root)
+  yay -S --needed --noconfirm "${packages[@]}"
 }
 
 # Синхронизация баз данных pacman
@@ -58,5 +58,5 @@ sync_pacman() {
     return 0
   fi
 
-  pacman -Sy
+  sudo pacman -Sy
 }

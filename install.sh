@@ -2,10 +2,10 @@
 # Hydeense — главный установочный скрипт
 #
 # Использование:
-#   sudo ./install.sh --all              # Установить все модули
-#   sudo ./install.sh --module base      # Установить конкретный модуль
-#   sudo ./install.sh --dry-run --all    # Показать что будет сделано
-#   sudo ./install.sh --list             # Показать доступные модули
+#   ./install.sh --all              # Установить все модули
+#   ./install.sh --module base      # Установить конкретный модуль
+#   ./install.sh --dry-run --all    # Показать что будет сделано
+#   ./install.sh --list             # Показать доступные модули
 
 set -euo pipefail
 
@@ -37,7 +37,7 @@ usage() {
   echo "Hydeense — сборка рабочего окружения Arch Linux"
   echo ""
   echo "Использование:"
-  echo "  sudo ./install.sh [опции]"
+  echo "  ./install.sh [опции]"
   echo ""
   echo "Опции:"
   echo "  --all              Установить все модули"
@@ -110,9 +110,13 @@ for mod in "${SELECTED_MODULES[@]}"; do
   fi
 done
 
-# --- Проверка root ---
+# --- Проверка что запущено НЕ от root ---
 
-require_root
+deny_root
+
+# --- Запрос sudo (пароль один раз) ---
+
+init_sudo
 
 # --- Запуск модулей ---
 
@@ -131,10 +135,6 @@ for mod in "${SELECTED_MODULES[@]}"; do
   source "$HYDEENSE_DIR/modules/$mod.sh"
   echo ""
 done
-
-local_home=$(get_real_home)
-local_user=$(get_real_user)
-sudo chown -R "$local_user:$local_user" "$local_home"
 
 log_info "=============================="
 log_info " Готово!"

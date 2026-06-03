@@ -29,12 +29,32 @@ log_step() {
   echo -e "${BLUE}[>>>]${NC} $*"
 }
 
-# Проверка что скрипт запущен от root
-require_root() {
-  if [[ $EUID -ne 0 ]]; then
-    log_error "Этот скрипт должен быть запущен от root (используй sudo)"
+# Проверка что скрипт НЕ запущен от root
+deny_root() {
+  if [[ $EUID -eq 0 ]]; then
+    log_error "Не запускай скрипт от root. Запусти от обычного пользователя."
+    log_error "Пароль sudo будет запрошен автоматически при старте."
     exit 1
   fi
+}
+
+# Запрос sudo-пароля один раз и поддержание сессии
+init_sudo() {
+  log_step "Запрос привилегий sudo (пароль будет запрошен один раз)"
+  sudo -v
+
+  # Фоновый процесс для продления sudo-сессии
+  (
+    while true; do
+      sudo -n true
+      sleep 50
+      kill -0 "$$" 2>/dev/null || exit
+    done
+  ) &
+  SUDO_KEEPALIVE_PID=$!
+  export SUDO_KEEPALIVE_PID
+
+  trap 'kill "$SUDO_KEEPALIVE_PID" 2>/dev/null' EXIT
 }
 
 # Проверка что команда доступна
@@ -61,35 +81,11 @@ backup_file() {
   fi
 }
 
-# Определение пользователя (при запуске через sudo)
-get_real_user() {
-  echo "${SUDO_USER:-$USER}"
-}
-
-get_real_home() {
-  local user
-  user=$(get_real_user)
-  eval echo "~$user"
-}
-
-# Выполнение команды от имени реального пользователя (не root)
-run_as_user() {
-  local user
-  user=$(get_real_user)
-  if [[ $EUID -eq 0 ]]; then
-    sudo -u "$user" "$@"
-  else
-    "$@"
-  fi
-}
-
 # Добавляет строку вида:
 # export KEY="VALUE"
 # в указанный файл, если переменная ещё не определена.
 add_env() {
-  local home
-  home=$(get_real_home)
-  local file="$home/.zshenv"
+  local file="$HOME/.zshenv"
   local key="$1"
   local value="$2"
 
