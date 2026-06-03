@@ -131,6 +131,10 @@ for mod in "${SELECTED_MODULES[@]}"; do
   echo ""
 done
 
+local_home=$(get_real_home)
+local_user=$(get_real_user)
+sudo chown -R "$local_user:$local_user" "$local_home"
+
 log_info "=============================="
 log_info " Готово!"
 log_info "=============================="
