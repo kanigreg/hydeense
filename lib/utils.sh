@@ -10,9 +10,6 @@ YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Режим dry-run (устанавливается из install.sh)
-DRY_RUN="${DRY_RUN:-false}"
-
 log_info() {
   echo -e "${GREEN}[INFO]${NC} $*"
 }
@@ -71,13 +68,10 @@ backup_file() {
 
   if [[ -e "$target" && ! -L "$target" ]]; then
     mkdir -p "$backup_dir"
-    local backup_path="$backup_dir/$(basename "$target").$timestamp"
-    if [[ "$DRY_RUN" == "true" ]]; then
-      log_info "[DRY-RUN] Бэкап: $target -> $backup_path"
-    else
-      cp -r "$target" "$backup_path"
-      log_info "Бэкап: $target -> $backup_path"
-    fi
+    local backup_path
+    backup_path="$backup_dir/$(basename "$target").$timestamp"
+    cp -r "$target" "$backup_path"
+    log_info "Бэкап: $target -> $backup_path"
   fi
 }
 

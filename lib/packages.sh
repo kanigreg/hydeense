@@ -16,11 +16,6 @@ install_packages() {
 
   log_step "Установка пакетов: ${packages[*]}"
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] pacman -S --needed --noconfirm ${packages[*]}"
-    return 0
-  fi
-
   sudo pacman -S --needed --noconfirm "${packages[@]}"
 }
 
@@ -40,11 +35,6 @@ install_aur() {
 
   log_step "Установка AUR-пакетов: ${packages[*]}"
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] yay -S --needed --noconfirm ${packages[*]}"
-    return 0
-  fi
-
   # AUR-пакеты ставим от обычного пользователя (yay нельзя запускать от root)
   yay -S --needed --noconfirm "${packages[@]}"
 }
@@ -52,11 +42,6 @@ install_aur() {
 # Синхронизация баз данных pacman
 sync_pacman() {
   log_step "Синхронизация баз pacman"
-
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] pacman -Sy"
-    return 0
-  fi
 
   sudo pacman -Sy
 }

@@ -28,11 +28,7 @@ link_config() {
   local parent_dir
   parent_dir=$(dirname "$target")
   if [[ ! -d "$parent_dir" ]]; then
-    if [[ "$DRY_RUN" == "true" ]]; then
-      log_info "[DRY-RUN] mkdir -p $parent_dir"
-    else
-      mkdir -p "$parent_dir"
-    fi
+    mkdir -p "$parent_dir"
   fi
 
   # Бэкапим существующий файл/директорию
@@ -40,19 +36,11 @@ link_config() {
 
   # Удаляем старый symlink если есть
   if [[ -L "$target" ]]; then
-    if [[ "$DRY_RUN" == "true" ]]; then
-      log_info "[DRY-RUN] Удаление старого symlink: $target"
-    else
-      rm "$target"
-    fi
+    rm "$target"
   fi
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] Линковка: $target -> $source"
-  else
-    ln -sf "$source" "$target"
-    log_info "Слинковано: $target -> $source"
-  fi
+  ln -sf "$source" "$target"
+  log_info "Слинковано: $target -> $source"
 }
 
 # Линковка всех файлов из директории в целевую директорию

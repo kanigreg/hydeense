@@ -10,13 +10,8 @@ if sudo snapper -c root get-config &>/dev/null 2>&1; then
   log_info "Конфигурация snapper 'root' уже существует"
 else
   log_step "Создание конфигурации snapper для / (subvolume @)"
-
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] sudo snapper -c root create-config /"
-  else
-    sudo snapper -c root create-config /
-    log_info "Конфигурация snapper 'root' создана"
-  fi
+  sudo snapper -c root create-config /
+  log_info "Конфигурация snapper 'root' создана"
 fi
 
 # --- Конфигурация snapper для home (@home) ---
@@ -25,13 +20,8 @@ if sudo snapper -c home get-config &>/dev/null 2>&1; then
   log_info "Конфигурация snapper 'home' уже существует"
 else
   log_step "Создание конфигурации snapper для /home (subvolume @home)"
-
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] sudo snapper -c home create-config /home"
-    # else
-    # sudo snapper -c home create-config /home
-    # log_info "Конфигурация snapper 'home' создана"
-  fi
+  # sudo snapper -c home create-config /home
+  # log_info "Конфигурация snapper 'home' создана"
 fi
 
 # --- Хелпер: создание snapshot'а перед установкой ---
@@ -47,14 +37,9 @@ hydeense_snapshot() {
 
   log_step "Создание snapshot: $description"
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] sudo snapper -c root create -d '$description'"
-    log_info "[DRY-RUN] sudo snapper -c home create -d '$description'"
-  else
-    sudo snapper -c root create --description "$description" || log_warn "Не удалось создать snapshot для root"
-    # sudo snapper -c home create --description "$description" || log_warn "Не удалось создать snapshot для home"
-    log_info "Snapshot'ы созданы: $description"
-  fi
+  sudo snapper -c root create --description "$description" || log_warn "Не удалось создать snapshot для root"
+  # sudo snapper -c home create --description "$description" || log_warn "Не удалось создать snapshot для home"
+  log_info "Snapshot'ы созданы: $description"
 }
 
 log_info "Модуль snapshots завершён"

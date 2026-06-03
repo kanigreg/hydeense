@@ -4,7 +4,6 @@
 # Использование:
 #   ./install.sh --all              # Установить все модули
 #   ./install.sh --module base      # Установить конкретный модуль
-#   ./install.sh --dry-run --all    # Показать что будет сделано
 #   ./install.sh --list             # Показать доступные модули
 
 set -euo pipefail
@@ -29,7 +28,6 @@ AVAILABLE_MODULES=(
 
 # --- Парсинг аргументов ---
 
-DRY_RUN="false"
 SELECTED_MODULES=()
 SHOW_LIST=false
 
@@ -42,7 +40,6 @@ usage() {
   echo "Опции:"
   echo "  --all              Установить все модули"
   echo "  --module <name>    Установить конкретный модуль (можно указать несколько раз)"
-  echo "  --dry-run          Показать что будет сделано, без реальных изменений"
   echo "  --list             Показать доступные модули"
   echo "  --help             Показать эту справку"
 }
@@ -61,10 +58,6 @@ while [[ $# -gt 0 ]]; do
     SELECTED_MODULES+=("$2")
     shift 2
     ;;
-  --dry-run)
-    DRY_RUN="true"
-    shift
-    ;;
   --list)
     SHOW_LIST=true
     shift
@@ -80,8 +73,6 @@ while [[ $# -gt 0 ]]; do
     ;;
   esac
 done
-
-export DRY_RUN
 
 # --- Показать список модулей ---
 
@@ -124,9 +115,6 @@ echo ""
 log_info "=============================="
 log_info " Hydeense installer"
 log_info "=============================="
-if [[ "$DRY_RUN" == "true" ]]; then
-  log_warn "Режим DRY-RUN: изменения не будут применены"
-fi
 echo ""
 
 for mod in "${SELECTED_MODULES[@]}"; do

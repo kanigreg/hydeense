@@ -2,6 +2,8 @@
 # Модуль: shell
 # Установка zsh, starship, конфигурация shell-окружения
 
+log_step "Настройка shell"
+
 SHELL_PACKAGES=(
   zsh
   zsh-completions
@@ -24,12 +26,8 @@ if [[ "$current_shell" == */zsh ]]; then
   log_info "zsh уже является login shell для $USER"
 else
   log_step "Смена login shell на zsh для $USER"
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] sudo chsh -s /usr/bin/zsh $USER"
-  else
-    sudo chsh -s /usr/bin/zsh "$USER"
-    log_info "Login shell изменён на zsh"
-  fi
+  sudo chsh -s /usr/bin/zsh "$USER"
+  log_info "Login shell изменён на zsh"
 fi
 
 # --- Линковка конфигов ---
@@ -40,6 +38,7 @@ link_config "$HYDEENSE_DIR/configs/shell/zshrc" "$HOME/.zshrc"
 # starship.toml
 link_config "$HYDEENSE_DIR/configs/shell/starship.toml" "$HOME/.config/starship.toml"
 
+# bat
 link_config_dir "$HYDEENSE_DIR/configs/bat" "$HOME/.config/bat"
 
 log_info "Модуль shell завершён"

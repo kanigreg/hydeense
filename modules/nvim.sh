@@ -2,6 +2,8 @@
 # Модуль: nvim
 # Установка и настройка Neovim
 
+log_step "Установка Neovim"
+
 PACKAGES=(
   nvim
   git

@@ -2,6 +2,8 @@
 # Модуль: base
 # Базовые пакеты, yay (AUR helper), mise (runtime manager)
 
+log_step "Установка базовых пакетов"
+
 BASE_PACKAGES=(
   git
   curl
@@ -30,22 +32,19 @@ if is_installed yay; then
 else
   log_step "Установка yay (AUR helper)"
 
-  if [[ "$DRY_RUN" == "true" ]]; then
-    log_info "[DRY-RUN] Клонирование и сборка yay из AUR"
-  else
-    tmp_dir="$HOME/.cache/hydeense/yay-build"
+  local_home="$HOME"
+  tmp_dir="$local_home/.cache/hydeense/yay-build"
 
-    mkdir -p "$tmp_dir"
+  mkdir -p "$tmp_dir"
 
-    if [[ -d "$tmp_dir/yay" ]]; then
-      rm -rf "$tmp_dir/yay"
-    fi
-
-    git clone https://aur.archlinux.org/yay-bin.git "$tmp_dir/yay"
-    cd "$tmp_dir/yay"
-    makepkg -si --noconfirm
-    cd "$HYDEENSE_DIR"
-
-    log_info "yay установлен"
+  if [[ -d "$tmp_dir/yay" ]]; then
+    rm -rf "$tmp_dir/yay"
   fi
+
+  git clone https://aur.archlinux.org/yay-bin.git "$tmp_dir/yay"
+  cd "$tmp_dir/yay"
+  makepkg -si --noconfirm
+  cd "$HYDEENSE_DIR"
+
+  log_info "yay установлен"
 fi

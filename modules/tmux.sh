@@ -2,6 +2,8 @@
 # Модуль: tmux
 # Установка и настройка tmux
 
+log_step "Установка tmux"
+
 PACKAGES=(
   tmux
 )

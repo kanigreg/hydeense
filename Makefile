@@ -1,7 +1,7 @@
 VM_HOST ?= archlinux.local
 VM_REPO_DIR ?= ~/hydeense
 
-.PHONY: install module deploy-vm test-vm dry-run list help
+.PHONY: install module deploy-vm test-vm list help
 
 help: ## Показать справку
 	@echo "Hydeense — Makefile targets"
@@ -17,9 +17,6 @@ ifndef M
 	$(error Укажи модуль: make module M=<name>)
 endif
 	./install.sh --module $(M)
-
-dry-run: ## Показать что будет сделано (без изменений)
-	./install.sh --dry-run --all
 
 list: ## Показать доступные модули
 	@./install.sh --list
