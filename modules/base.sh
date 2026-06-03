@@ -16,6 +16,7 @@ BASE_PACKAGES=(
   man-db
   openssh
   mise
+  rsync
 )
 
 # Синхронизация баз pacman

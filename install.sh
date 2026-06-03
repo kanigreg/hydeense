@@ -24,6 +24,7 @@ AVAILABLE_MODULES=(
   shell
   nvim
   tmux
+  podman
 )
 
 # --- Парсинг аргументов ---

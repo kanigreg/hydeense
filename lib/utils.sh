@@ -87,9 +87,11 @@ run_as_user() {
 # export KEY="VALUE"
 # в указанный файл, если переменная ещё не определена.
 add_env() {
-  local file="$1"
-  local key="$2"
-  local value="$3"
+  local home
+  home=$(get_real_home)
+  local file="$home/.zshenv"
+  local key="$1"
+  local value="$2"
 
   touch "$file"
 
