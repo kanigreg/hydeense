@@ -2,6 +2,7 @@
 # Hydeense — главный установочный скрипт
 #
 # Использование:
+#   ./install.sh                    # Интерактивный выбор модулей (gum)
 #   ./install.sh --all              # Установить все модули
 #   ./install.sh --module base      # Установить конкретный модуль
 #   ./install.sh --list             # Показать доступные модули
@@ -25,71 +26,48 @@ AVAILABLE_MODULES=(
   tmux
   podman
 )
-
-# --- Парсинг аргументов ---
-
 SELECTED_MODULES=()
-SHOW_LIST=false
 
-usage() {
-  echo "Hydeense — сборка рабочего окружения Arch Linux"
-  echo ""
-  echo "Использование:"
-  echo "  ./install.sh [опции]"
-  echo ""
-  echo "Опции:"
-  echo "  --all              Установить все модули"
-  echo "  --module <name>    Установить конкретный модуль (можно указать несколько раз)"
-  echo "  --list             Показать доступные модули"
-  echo "  --update-mirrors   Обновить pacman зеркала"
-  echo "  --help             Показать эту справку"
-}
+# --- Проверка что запущено НЕ от root ---
 
-while [[ $# -gt 0 ]]; do
-  case "$1" in
-  --all)
-    SELECTED_MODULES=("${AVAILABLE_MODULES[@]}")
-    shift
-    ;;
-  --module)
-    if [[ -z "${2:-}" ]]; then
-      log_error "Не указано имя модуля после --module"
-      exit 1
-    fi
-    SELECTED_MODULES+=("$2")
-    shift 2
-    ;;
-  --list)
-    SHOW_LIST=true
-    shift
-    ;;
-  --update-mirrors)
-    install_packages reflector
-    sudo cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.backup
-    sudo reflector --latest 5
-    exit 0
-    ;;
-  --help | -h)
-    usage
-    exit 0
-    ;;
-  *)
-    log_error "Неизвестный аргумент: $1"
-    usage
-    exit 1
-    ;;
-  esac
-done
+deny_root
 
-# --- Показать список модулей ---
+# --- Запрос sudo (пароль один раз) ---
 
-if [[ "$SHOW_LIST" == "true" ]]; then
-  echo "Доступные модули:"
-  for mod in "${AVAILABLE_MODULES[@]}"; do
-    echo "  - $mod"
-  done
+init_sudo
+
+# --- Установка gum если нужен интерактив ---
+
+if ! is_installed gum; then
+  log_step "Установка gum для интерактивного меню"
+  sudo pacman -S --needed --noconfirm gum
+fi
+
+clear
+gum style \
+  --foreground 4 --border-foreground 4 --border rounded \
+  --align center --width 40 --margin "0 1" --padding "1 2" \
+  "Hydeense installer" "Выбери модули для установки"
+
+mapfile -t SELECTED_MODULES < <(
+  gum choose --no-limit --height 10 \
+    --header "Пробел — выбрать, Enter — подтвердить" \
+    --selected.foreground 2 \
+    "${AVAILABLE_MODULES[@]}"
+)
+
+if [[ ${#SELECTED_MODULES[@]} -eq 0 ]]; then
+  log_warn "Ничего не выбрано, выход"
   exit 0
 fi
+
+echo ""
+log_info "Выбранные модули: ${SELECTED_MODULES[*]}"
+
+gum confirm "Начать установку?" || {
+  log_warn "Установка отменена"
+  exit 0
+}
 
 # --- Валидация ---
 
@@ -107,14 +85,6 @@ for mod in "${SELECTED_MODULES[@]}"; do
     exit 1
   fi
 done
-
-# --- Проверка что запущено НЕ от root ---
-
-deny_root
-
-# --- Запрос sudo (пароль один раз) ---
-
-init_sudo
 
 # --- Запуск модулей ---
 

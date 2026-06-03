@@ -17,6 +17,7 @@ BASE_PACKAGES=(
   openssh
   mise
   rsync
+  gum
 )
 
 # Синхронизация баз pacman
