@@ -9,7 +9,7 @@ PACKAGES=(
 )
 
 AUR_PACKAGES=(
-  sash-bin
+  sesh-bin
 )
 
 install_packages "${PACKAGES[@]}"
@@ -28,6 +28,6 @@ else
 fi
 
 mkdir -p /usr/local/share/zsh/site-functions
-$(sash complation zsh) > /usr/local/share/zsh/site-functions/_sesh
+sesh complation zsh > /usr/local/share/zsh/site-functions/_sesh
 
 log_info "Модуль tmux завершён"
