@@ -25,10 +25,10 @@ if [[ -d "$HYDEENSE_DIR/configs/tmux" && -n "$(ls -A "$HYDEENSE_DIR/configs/tmux
   git clone https://github.com/tmux-plugins/tpm "$local_home/.config/tmux/plugins/tpm"
 else
   log_warn "Директория configs/tmux пуста — конфиг не слинкован"
-  log_info "Добавь свой конфиг tmux в configs/tmux/ и перезапусти модуль"
 fi
 
 mkdir -p /usr/local/share/zsh/site-functions
 sesh complation zsh >/usr/local/share/zsh/site-functions/_sesh
+link_config_dir "$HYDEENSE_DIR/configs/sesh" "$local_home/.config/sesh"
 
 log_info "Модуль tmux завершён"
