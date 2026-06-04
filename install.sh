@@ -19,6 +19,7 @@ source "$HYDEENSE_DIR/lib/dotfiles.sh"
 
 # Доступные модули (порядок важен — зависимости идут первыми)
 AVAILABLE_MODULES=(
+  reflector
   base
   git
   shell
