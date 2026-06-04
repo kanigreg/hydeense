@@ -25,6 +25,7 @@ AVAILABLE_MODULES=(
   nvim
   tmux
   podman
+  k8s
 )
 SELECTED_MODULES=()
 
