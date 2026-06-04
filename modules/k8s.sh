@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Модуль: tmux
-# Установка и настройка tmux
+# Модуль: k8s
+# Установка и настройка k8s инструменотов
 
-log_step "Установка tmux"
+log_step "Установка инструменотов k8s"
 
 PACKAGES=(
   kubectl
