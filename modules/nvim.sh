@@ -30,4 +30,7 @@ else
   log_info "Добавь свой конфиг nvim в configs/nvim/ и перезапусти модуль"
 fi
 
+add_env EDITOR "nvim"
+add_env SUDO_EDITOR "nvim"
+
 log_info "Модуль nvim завершён"
