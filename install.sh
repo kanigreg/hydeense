@@ -17,17 +17,11 @@ source "$HYDEENSE_DIR/lib/utils.sh"
 source "$HYDEENSE_DIR/lib/packages.sh"
 source "$HYDEENSE_DIR/lib/dotfiles.sh"
 
-# Доступные модули (порядок важен — зависимости идут первыми)
-AVAILABLE_MODULES=(
-  reflector
-  base
-  git
-  shell
-  nvim
-  tmux
-  podman
-  k8s
-)
+# Доступные модули (автоматически формируются из названий файлов в modules/ в алфавитном порядке)
+AVAILABLE_MODULES=()
+for mod_file in "$HYDEENSE_DIR/modules/"*.sh; do
+  AVAILABLE_MODULES+=("$(basename "$mod_file" .sh)")
+done
 SELECTED_MODULES=()
 
 # --- Проверка что запущено НЕ от root ---
